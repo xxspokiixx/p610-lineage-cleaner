@@ -1,0 +1,3 @@
+# Intentionally empty of property overrides.
+# Heap, zram, low_ram, and CPU governor stay on Lineage's values for this 4 GB tablet.
+# Window blur and animation scale are applied at boot from config.prop instead.

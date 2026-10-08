@@ -1,0 +1,37 @@
+# P610 Lean config. Edit, save, reboot.
+# Path on device: /data/adb/p610-lean/config.prop
+# 1 = on, 0 = off. Uninstall the module from Magisk while booted to undo.
+
+# Shorter animations. Allowed: 0, 0.25, 0.5, 0.75, 1, 1.5
+ANIMATION_SCALE=0.5
+
+# Mali-G72 MP3 spends real time on Android 16 window blur. Turn that off.
+DISABLE_WINDOW_BLUR=1
+
+# Stop scanning for Wi-Fi while Wi-Fi is off. Slightly worse network location.
+DISABLE_WIFI_SCAN_ALWAYS=1
+
+# eMMC trim, at most once a week. Not run on every boot.
+WEEKLY_FSTRIM=1
+
+# Ask Android to run its normal background ART optimizer once.
+DEXOPT_ONCE=1
+
+# Disabled for the owner user only. Never uninstalled.
+# These three are harmless on a Wi-Fi Lineage tablet.
+DISABLE_TRACEUR=1
+DISABLE_EASTER_EGG=1
+DISABLE_SIM_TOOLKIT=1
+
+# Optional apps. Off means "leave them alone".
+DISABLE_JELLY=0
+DISABLE_TWELVE=0
+DISABLE_ETAR=0
+DISABLE_RECORDER=0
+DISABLE_CALCULATOR=0
+DISABLE_PRINT_SPOOLER=0
+DISABLE_LIVE_WALLPAPER=0
+
+# Extra package names, comma-separated. Launcher, Settings, SystemUI,
+# camera, keyboard, and the Lineage updater are refused.
+EXTRA_DISABLE=

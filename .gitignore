@@ -2,3 +2,6 @@ dist/
 *.zip
 work/
 *.apk
+__pycache__/
+*.pyc
+

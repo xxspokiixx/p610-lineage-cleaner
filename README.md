@@ -17,24 +17,36 @@ What you should feel: shorter animations, no window blur on a weak GPU, a bit le
 
 ## Install
 
-You need Magisk 20.4+ (KernelSU and APatch can load the same zip). Lineage does not include root. Installing Magisk is separate, and it is the risky part. This zip does not touch the bootloader, vbmeta, or recovery.
+The tablet must be SM-P610 on LineageOS. The module zip does not install Magisk. If Magisk, KernelSU, or APatch is already there, install the zip from that app and stop. If nothing is rooted yet, `scripts/root-magisk.sh` downloads **official** Magisk from [topjohnwu/Magisk](https://github.com/topjohnwu/Magisk) and sideloads it in Lineage recovery. Magisk then patches the boot image that is already on the tablet. The script does not download a boot image and does not write vbmeta, recovery, or super.
 
-1. Download [p610-lean-v1.0.0.zip](https://github.com/xxspokiixx/p610-lineage-cleaner/releases/download/v1.0.0/p610-lean-v1.0.0.zip) from the release. Do not flash GitHub's "Download ZIP" of the source. That archive is not a module.
-2. Check the file:
+It refuses any device whose codename is not `gta4xlwifi`, and it refuses to install Magisk on top of KernelSU or APatch.
 
-   ```
-   sha256sum p610-lean-v1.0.0.zip
+1. On the tablet: Settings → Developer options → USB debugging. Tap Allow on the USB prompt.
+2. On a computer, from this repository:
+
+   ```sh
+   sh scripts/root-magisk.sh --check
+   sh scripts/root-magisk.sh --yes --module dist/p610-lean-v1.0.0.zip
    ```
 
-   ```
-   759d1a7b222aace99f20e081d7f0c7334861685414c519eeb402e4565d0aa54e
-   ```
+   `--check` changes nothing. `--yes` is what reboots to recovery when Magisk is missing. Build the zip first with `python3 build-zip.py`, or pass the zip you downloaded from the release.
 
-3. Magisk → Modules → Install from storage → the zip → reboot.
+3. When Lineage recovery says signature verification failed, tap **Yes**. Magisk is not signed with Lineage's key.
+4. If Magisk was already installed, the script skips the reboot to recovery and only installs the module.
+5. The first Android boot after the module is installed may run warm for a few minutes while ART optimizes. That pass does not repeat.
+
+You can still install by hand: Magisk → Modules → Install from storage → the release zip → reboot. Do not flash GitHub's "Download ZIP" of this source repository. That archive is not a module.
+
+Module zip: [p610-lean-v1.0.0.zip](https://github.com/xxspokiixx/p610-lineage-cleaner/releases/download/v1.0.0/p610-lean-v1.0.0.zip)
+
+```
+sha256sum p610-lean-v1.0.0.zip
+759d1a7b222aace99f20e081d7f0c7334861685414c519eeb402e4565d0aa54e
+```
+
+If a Magisk install bootloops on the Lineage logo, reboot to recovery (Volume Up + Power while plugged into a PC) and sideload the same LineageOS zip you already installed. That restores the boot image without using someone else's patched image.
 
 The installer aborts if `ro.product.device` is not `gta4xlwifi`.
-
-On first boot the module waits until Android is up, then applies the profile. The ART pass can take several minutes and the tablet may feel warm. It runs once.
 
 ## What it changes
 
@@ -102,7 +114,7 @@ python3 build-zip.py
 sha256sum dist/p610-lean-v1.0.0.zip
 ```
 
-The hash above is what that command prints. `tests/test-apply.sh` mocks `pm`, `settings`, `cmd`, and `fstrim` and checks the device gate, the denylist, the weekly trim, and restore.
+The hash above is what that command prints. `tests/test-apply.sh` checks the module. `tests/test-root-magisk.sh` checks that the root helper refuses the wrong tablet, leaves KernelSU alone, and does not reboot unless Magisk is missing and you passed `--yes`.
 
 ## After a Lineage update
 
